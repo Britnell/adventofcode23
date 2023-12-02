@@ -3,7 +3,7 @@ import inputs from "./inputs";
 const getInt = (reg: RegExpMatchArray | null) => {
   if (!reg) return 0;
 
-  const str = reg[0];
+  const str = reg[1];
   let x = parseInt(str);
   if (isNaN(x)) {
     if (str === "one") x = 1;
@@ -23,7 +23,8 @@ const res = inputs.one
   .split("\n")
   //   .slice(0, 100)
   .map((line) => {
-    const reg = /(one|two|three|four|five|six|seven|eight|nine|[123456789])/g;
+    const reg =
+      /(?=(one|two|three|four|five|six|seven|eight|nine|[123456789]))/g;
     const arr = [...line.matchAll(reg)];
 
     const first = arr[0];
@@ -33,10 +34,7 @@ const res = inputs.one
     const b = getInt(last);
     const val = a * 10 + b;
 
-    // if (arr.length === 1) {
-    if (val === 0) {
-      console.log({ line, val });
-    }
+    // console.log({ line, val });
     return val;
   });
 

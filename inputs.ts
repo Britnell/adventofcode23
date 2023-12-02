@@ -1,6 +1,8 @@
 export default {
   testone: `two1nine
   eightwothree
+  xtwone
+  threeight
   abcone2threexyz
   xtwone3four
   4nineeightseven2
