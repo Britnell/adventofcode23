@@ -30,7 +30,7 @@ const res = time.map((dur, race) => {
     options.push(dist);
   }
   const beat = options.filter((dist) => dist > rec);
-  console.log({ options, rec, beat, b: beat.length });
+  console.log({ o: options.length, rec, b: beat.length });
   return beat.length;
 });
 
