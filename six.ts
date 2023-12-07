@@ -1,10 +1,12 @@
 import inputs from "./inputs";
 
 const x = inputs.six;
+
 const [time, dist] = x.split("\n").map((row) =>
   row
     .split(":")[1]
-    .trim()
+    // .trim() // part A
+    .replaceAll(" ", "") // part B
     .split(" ")
     .map((x) => parseInt(x))
     .filter((x) => !isNaN(x))
