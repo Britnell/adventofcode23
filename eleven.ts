@@ -12,7 +12,7 @@ const test = `
 .......#..
 #...#.....`;
 
-const img = inputs.eleven.trim().split("\n");
+const img = test.trim().split("\n");
 
 const expandSpace = (rows: string[]) => {
   const emptyRows = [];
@@ -35,20 +35,15 @@ const expandSpace = (rows: string[]) => {
   for (let r = emptyRows.length - 1; r >= 0; r--) {
     const d = emptyRows[r];
     const double = expanded[d];
-
     expanded = [...expanded.slice(0, d), double, ...expanded.slice(d)];
   }
   // expand Cols
-  expanded = expanded.map((row) => {
-    let expanRow = "";
-    for (let c = 0; c < row.length; c++) {
-      const ch = row.charAt(c);
-      //   console.log(c, ch, colHasGalaxy[c]);
-      if (colHasGalaxy[c]) expanRow += ch;
-      else expanRow += ch + ch;
-    }
-    return expanRow;
-  });
+  expanded = expanded.map((row) =>
+    row
+      .split("")
+      .map((ch, c) => (colHasGalaxy[c] ? ch : ch + ch))
+      .join("")
+  );
   return expanded;
 };
 
