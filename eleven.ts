@@ -14,43 +14,7 @@ const test = `
 
 const img = inputs.eleven.trim().split("\n");
 
-const expandSpace = (rows: string[]) => {
-  const emptyRows = [];
-  const colHasGalaxy: boolean[] = Array(rows[0].length).fill(false);
-
-  // find Empty
-  for (let r = 0; r < rows.length; r++) {
-    if (!rows[r].includes("#")) emptyRows.push(r);
-  }
-  for (let c = 0; c < rows[0].length; c++) {
-    for (let r = 0; r < rows.length; r++) {
-      if (rows[r].charAt(c) === "#") colHasGalaxy[c] = true;
-    }
-  }
-
-  console.log({
-    emptyCol: colHasGalaxy.filter((x) => x === false).length,
-    emptyRow: emptyRows.length,
-  });
-
-  // Expand Row
-  let expanded = [...rows];
-  for (let r = emptyRows.length - 1; r >= 0; r--) {
-    const d = emptyRows[r];
-    const double = expanded[d];
-    expanded = [...expanded.slice(0, d), double, ...expanded.slice(d)];
-  }
-  // expand Cols
-  expanded = expanded.map((row) =>
-    row
-      .split("")
-      .map((ch, c) => (colHasGalaxy[c] ? ch : ch + ch))
-      .join("")
-  );
-  return expanded;
-};
-
-const findHash = (rows: string[]) => {
+const findHashes = (rows: string[]) => {
   const hashes: GX[] = [];
 
   rows.forEach((row, r) => {
@@ -63,19 +27,48 @@ const findHash = (rows: string[]) => {
   return hashes;
 };
 
-const expanded = expandSpace(img);
-// console.log(expanded.join("\n"));
+// const expanded = [img];
 
-const hashes = findHash(expanded);
+const emptyRows = [];
+const colHasGalaxy: boolean[] = Array(img[0].length).fill(false);
+
+// find Empty
+for (let r = 0; r < img.length; r++) {
+  if (!img[r].includes("#")) emptyRows.push(r);
+}
+for (let c = 0; c < img[0].length; c++) {
+  for (let r = 0; r < img.length; r++) {
+    if (img[r].charAt(c) === "#") colHasGalaxy[c] = true;
+  }
+}
+const emptyCols = colHasGalaxy.map((x) => !x);
+
+const hashes = findHashes(img);
+console.log({ emptyRows, emptyCols });
+
 console.log("hashes", hashes.length);
 
 type GX = {
   r: number;
   i: number;
 };
+const xmin = (a: number, b: number) => (a < b ? a : b);
+const xmax = (a: number, b: number) => (a > b ? a : b);
+
 const calcDist = (gxa: GX, gxb: GX) => {
   const dist = Math.abs(gxa.r - gxb.r) + Math.abs(gxa.i - gxb.i);
-  return dist;
+
+  let empties = 0;
+
+  for (let r = xmin(gxa.r, gxb.r); r < xmax(gxa.r, gxb.r); r++) {
+    if (emptyRows.includes(r)) empties++;
+    // console.log(r, emptyRows.includes(r));
+  }
+  for (let i = xmin(gxa.i, gxb.i); i < xmax(gxa.i, gxb.i); i++) {
+    // console.log(i, emptyCols[i]);
+    if (emptyCols[i]) empties++;
+  }
+  return dist + empties * 999999;
 };
 
 const pairs = [];
@@ -87,13 +80,14 @@ for (let a = 0; a < hashes.length; a++) {
 
 console.log(" pairs ", pairs.length);
 
+// calcDist(hashes[0], hashes[1]);
+
 const distances = pairs.map(([a, b]) => {
   const gxa = hashes[a];
   const gxb = hashes[b];
-  const dist = calcDist(gxa, gxb);
   //   console.log([a, b], gxa, gxb, { dist });
   //   console.log(a, b);
-  return dist;
+  return calcDist(gxa, gxb);
 });
 
 // console.log(distances);
