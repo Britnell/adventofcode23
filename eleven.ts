@@ -28,7 +28,10 @@ const expandSpace = (rows: string[]) => {
     }
   }
 
-  console.log({ colHasGalaxy, emptyRows });
+  console.log({
+    emptyCol: colHasGalaxy.filter((x) => x === false).length,
+    emptyRow: emptyRows.length,
+  });
 
   // Expand Row
   let expanded = [...rows];
@@ -55,8 +58,7 @@ const findHash = (rows: string[]) => {
       .map((reg) => reg.index)
       .filter((x) => x !== undefined);
     // console.log({ row }, hshs);
-    // console.log(row, hshs);
-    hshs.forEach((i) => hashes.push({ r, i }));
+    hshs.forEach((i) => i !== undefined && hashes.push({ r, i }));
   });
   return hashes;
 };
@@ -65,7 +67,7 @@ const expanded = expandSpace(img);
 // console.log(expanded.join("\n"));
 
 const hashes = findHash(expanded);
-// console.log(hashes);
+console.log("hashes", hashes.length);
 
 type GX = {
   r: number;
@@ -75,7 +77,6 @@ const calcDist = (gxa: GX, gxb: GX) => {
   const dist = Math.abs(gxa.r - gxb.r) + Math.abs(gxa.i - gxb.i);
   return dist;
 };
-calcDist(hashes[0], hashes[1]);
 
 const pairs = [];
 for (let a = 0; a < hashes.length; a++) {
