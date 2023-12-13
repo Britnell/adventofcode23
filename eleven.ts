@@ -12,6 +12,7 @@ const test = `
 .......#..
 #...#.....`;
 
+// const img = test.trim().split("\n");
 const img = inputs.eleven.trim().split("\n");
 
 const findHashes = (rows: string[]) => {
